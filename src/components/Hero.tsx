@@ -1,67 +1,71 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
-import Button from "@/components/Button"
-import { useState } from "react"
+import Button from "./Button"
+import { siteConfig } from "@/config/site"
+import { useRouter } from "next/navigation"
 
-export default function CheckoutPage() {
-  const searchParams = useSearchParams()
+export default function Hero() {
+  const router = useRouter()
 
-  const name = searchParams.get("name")
-  const price = searchParams.get("price")
+  const handlePrimaryCTA = () => {
+    // default product (first product)
+    const product = siteConfig.products[0]
 
-  const [loading, setLoading] = useState(false)
-
-  const handlePayment = async () => {
-    if (!name || !price) {
-      alert("Invalid product data")
-      return
-    }
-
-    try {
-      setLoading(true)
-
-      // Placeholder for Phase 2 (PayMongo API call)
-      console.log("Proceeding to payment:", { name, price })
-
-      // TEMP behavior (for now)
-      alert("Payment integration coming next phase")
-
-    } catch (error) {
-      console.error(error)
-      alert("Something went wrong")
-    } finally {
-      setLoading(false)
-    }
+    router.push(
+      `/checkout?name=${encodeURIComponent(product.name)}&price=${product.price}`
+    )
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
+    <section
+      className="min-h-screen flex items-center"
+      style={{
+        backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.3)), url('${siteConfig.hero.image}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="container grid md:grid-cols-2 gap-10 items-center">
 
-      <div className="bg-[#1f2833] p-8 rounded-2xl flex flex-col gap-6 w-full max-w-md">
+        {/* LEFT CONTENT */}
+        <div className="flex flex-col gap-6">
 
-        <h1 className="text-2xl font-bold">Checkout</h1>
+          {/* Badge */}
+          <span className="text-sm bg-[#1f2833] px-3 py-1 rounded-full w-fit">
+            {siteConfig.hero.badge}
+          </span>
 
-        <div>
-          <p className="text-gray-400">Product</p>
-          <p className="text-lg">{name}</p>
+          {/* Headline */}
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
+            {siteConfig.brand.name.split(" ")[0]}{" "}
+            <span className="text-[#ccff00]">
+              {siteConfig.brand.highlight}
+            </span>
+          </h1>
+
+          {/* Tagline */}
+          <p className="text-gray-400 max-w-md">
+            {siteConfig.brand.tagline}
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex gap-4">
+            <Button
+              text={siteConfig.hero.primaryCTA}
+              onClick={handlePrimaryCTA}
+            />
+            <Button
+              text={siteConfig.hero.secondaryCTA}
+              variant="secondary"
+            />
+          </div>
+
         </div>
 
-        <div>
-          <p className="text-gray-400">Price</p>
-          <p className="text-xl font-bold">₱{price}</p>
-        </div>
-
-        <button
-          onClick={handlePayment}
-          disabled={loading}
-          className="bg-[#ccff00] text-black py-3 rounded-xl font-semibold hover:opacity-80 transition disabled:opacity-50"
-        >
-          {loading ? "Processing..." : "Proceed to Payment"}
-        </button>
+        {/* RIGHT SIDE (empty for image focus) */}
+        <div />
 
       </div>
-
-    </main>
+    </section>
   )
 }
