@@ -1,45 +1,67 @@
-import Button from "./Button"
+"use client"
 
-export default function Hero() {
+import { useSearchParams } from "next/navigation"
+import Button from "@/components/Button"
+import { useState } from "react"
+
+export default function CheckoutPage() {
+  const searchParams = useSearchParams()
+
+  const name = searchParams.get("name")
+  const price = searchParams.get("price")
+
+  const [loading, setLoading] = useState(false)
+
+  const handlePayment = async () => {
+    if (!name || !price) {
+      alert("Invalid product data")
+      return
+    }
+
+    try {
+      setLoading(true)
+
+      // Placeholder for Phase 2 (PayMongo API call)
+      console.log("Proceeding to payment:", { name, price })
+
+      // TEMP behavior (for now)
+      alert("Payment integration coming next phase")
+
+    } catch (error) {
+      console.error(error)
+      alert("Something went wrong")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <section
-      className="min-h-screen flex items-center"
-      style={{
-        backgroundImage:
-          "linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.3)), url('/gym.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="container grid md:grid-cols-2 gap-10 items-center">
+    <main className="min-h-screen flex items-center justify-center px-4">
 
-        {/* LEFT CONTENT */}
-        <div className="flex flex-col gap-6">
+      <div className="bg-[#1f2833] p-8 rounded-2xl flex flex-col gap-6 w-full max-w-md">
 
-          <span className="text-sm bg-[#1f2833] px-3 py-1 rounded-full w-fit">
-            384K+ Followers Brand
-          </span>
+        <h1 className="text-2xl font-bold">Checkout</h1>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight">
-            NATTY{" "}
-            <span className="text-[#ccff00]">NELSON</span>
-          </h1>
-
-          <p className="text-gray-400 max-w-md">
-            Build a powerful physique, gain real strength, and transform your body with elite training systems.
-          </p>
-
-          <div className="flex gap-4">
-            <Button text="Transform Your Physique" />
-            <Button text="Browse Shop" variant="secondary" />
-          </div>
-
+        <div>
+          <p className="text-gray-400">Product</p>
+          <p className="text-lg">{name}</p>
         </div>
 
-        {/* RIGHT SIDE (EMPTY FOR IMAGE FOCUS) */}
-        <div />
+        <div>
+          <p className="text-gray-400">Price</p>
+          <p className="text-xl font-bold">₱{price}</p>
+        </div>
+
+        <button
+          onClick={handlePayment}
+          disabled={loading}
+          className="bg-[#ccff00] text-black py-3 rounded-xl font-semibold hover:opacity-80 transition disabled:opacity-50"
+        >
+          {loading ? "Processing..." : "Proceed to Payment"}
+        </button>
 
       </div>
-    </section>
+
+    </main>
   )
 }

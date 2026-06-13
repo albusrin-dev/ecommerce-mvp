@@ -1,3 +1,6 @@
+"use client"
+
+import { useRouter } from "next/navigation"
 import Button from "./Button"
 
 type Product = {
@@ -6,6 +9,14 @@ type Product = {
 }
 
 export default function ProductCard({ name, price }: Product) {
+  const router = useRouter()
+
+  const handleCheckout = () => {
+    router.push(
+      `/checkout?name=${encodeURIComponent(name)}&price=${price}`
+    )
+  }
+
   return (
     <div className="bg-[#1f2833] rounded-2xl p-6 flex flex-col gap-4 hover:scale-105 transition">
 
@@ -15,7 +26,7 @@ export default function ProductCard({ name, price }: Product) {
 
       <p className="text-xl font-bold">₱{price}</p>
 
-      <Button text="Buy Now" />
+      <Button text="Buy Now" onClick={handleCheckout} />
 
     </div>
   )
