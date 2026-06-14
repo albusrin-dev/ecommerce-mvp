@@ -3,7 +3,6 @@
 import { useSearchParams } from "next/navigation"
 import { useEffect, useRef } from "react"
 import emailjs from "@emailjs/browser"
-import { siteConfig } from "@/config/site"
 
 export default function SuccessPage() {
   const searchParams = useSearchParams()
@@ -13,13 +12,67 @@ export default function SuccessPage() {
 
   const hasRun = useRef(false)
 
+  // ✅ EMAIL FUNCTIONS
+  const sendCustomerEmail = async (name: string, price: string) => {
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CUSTOMER
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+    if (!serviceId || !templateId || !publicKey) {
+      console.error("Missing EmailJS environment variables")
+      return
+    }
+
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          product: name,
+          price: price,
+        },
+        publicKey
+      )
+    } catch (error) {
+      console.error("Customer email failed:", error)
+    }
+  }
+
+  const sendOwnerEmail = async (name: string, price: string) => {
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_OWNER
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL
+
+    if (!serviceId || !templateId || !publicKey || !ownerEmail) {
+      console.error("Missing EmailJS environment variables")
+      return
+    }
+
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          product: name,
+          price: price,
+          email: ownerEmail,
+        },
+        publicKey
+      )
+    } catch (error) {
+      console.error("Owner email failed:", error)
+    }
+  }
+
+  // ✅ MAIN PROCESS
   useEffect(() => {
     if (hasRun.current) return
     hasRun.current = true
 
     const processOrder = async () => {
       try {
-        // ✅ 1. Save order to Google Sheets
+        // Save order
         await fetch("/api/save-order", {
           method: "POST",
           headers: {
@@ -32,34 +85,14 @@ export default function SuccessPage() {
           }),
         })
 
-        // ✅ 2. Send emails (non-blocking system)
-        try {
-          await emailjs.send(
-            "service_d6eoq0l",
-            "template_nfaayah",
-            {
-              product: name,
-              price: price,
-            },
-            "pZWEmS1iCQUogsCgK"
-          )
-
-
-          await emailjs.send(
-            "service_d6eoq0l",
-            "template_92rm59k",
-            {
-              product: name,
-              price: price,
-            },
-            "pZWEmS1iCQUogsCgK"
-          )
-        } catch (emailError) {
-          console.error("Email failed:", emailError)
+        // Send emails
+        if (name && price) {
+          await sendCustomerEmail(name, price)
+          await sendOwnerEmail(name, price)
         }
 
       } catch (error) {
-        console.error("Order save failed:", error)
+        console.error("Order processing failed:", error)
       }
     }
 
@@ -73,11 +106,11 @@ export default function SuccessPage() {
       <div className="bg-[#1f2833] p-8 rounded-2xl text-center flex flex-col gap-4">
 
         <h1 className="text-3xl font-bold text-[#ccff00]">
-          {siteConfig.success.title}
+          Payment Successful
         </h1>
 
         <p className="text-gray-400">
-          {siteConfig.success.subtitle}
+          Your order has been confirmed.
         </p>
 
         <div className="mt-4">
