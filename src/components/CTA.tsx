@@ -1,4 +1,6 @@
 import Button from "./Button"
+import { siteConfig } from "@/config/site"
+
 
 export default function CTA() {
   return (
@@ -7,10 +9,10 @@ export default function CTA() {
       <div className="container flex flex-col items-center gap-6">
 
         <h2 className="text-4xl font-bold">
-          Start Your Transformation Today
+          {siteConfig.cta.button}
         </h2>
 
-        <Button text="Get Started" />
+        <Button text={siteConfig.cta.text} />
 
       </div>
 

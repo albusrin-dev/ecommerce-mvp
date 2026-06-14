@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { useState } from "react"
+import { siteConfig } from "@/config/site"
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams()
@@ -58,7 +59,7 @@ export default function CheckoutPage() {
           disabled={loading}
           className="bg-[#ccff00] text-black py-3 rounded-xl font-semibold hover:opacity-80 transition disabled:opacity-50"
         >
-          {loading ? "Processing..." : "Proceed to Payment"}
+          {loading ? "Processing..." : <h1>{siteConfig.checkout.button}</h1>}
         </button>
 
       </div>

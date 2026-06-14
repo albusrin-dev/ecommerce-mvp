@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation"
 import { useEffect, useRef } from "react"
 import emailjs from "@emailjs/browser"
+import { siteConfig } from "@/config/site"
 
 export default function SuccessPage() {
   const searchParams = useSearchParams()
@@ -43,7 +44,7 @@ export default function SuccessPage() {
             "pZWEmS1iCQUogsCgK"
           )
 
-          
+
           await emailjs.send(
             "service_d6eoq0l",
             "template_92rm59k",
@@ -72,11 +73,11 @@ export default function SuccessPage() {
       <div className="bg-[#1f2833] p-8 rounded-2xl text-center flex flex-col gap-4">
 
         <h1 className="text-3xl font-bold text-[#ccff00]">
-          Payment Successful
+          {siteConfig.success.title}
         </h1>
 
         <p className="text-gray-400">
-          Your order has been confirmed.
+          {siteConfig.success.subtitle}
         </p>
 
         <div className="mt-4">

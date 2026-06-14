@@ -30,5 +30,16 @@ export const siteConfig = {
   cta: {
     text: "Start Your Transformation Today",
     button: "Get Started",
+    button_two: "Buy Now",
   },
+
+  checkout: {
+    title: "Checkout",
+    button: "Proceed to Payment"
+  },
+
+  success: {
+    title: "Payment Successful",
+    subtitle: "Your order has been confirmed"
+  }
 }

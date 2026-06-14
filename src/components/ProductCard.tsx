@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import Button from "./Button"
+import { siteConfig } from "@/config/site"
 
 type Product = {
   name: string
@@ -26,7 +27,7 @@ export default function ProductCard({ name, price }: Product) {
 
       <p className="text-xl font-bold">₱{price}</p>
 
-      <Button text="Buy Now" onClick={handleCheckout} />
+      <Button text= {siteConfig.cta.button_two} onClick={handleCheckout} />
 
     </div>
   )
