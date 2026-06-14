@@ -26,7 +26,7 @@ export default function CheckoutPage() {
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
       // redirect to success page
-      window.location.href = `/success?id=${id}`
+     window.location.href = `/success?name=${encodeURIComponent(product.name)}&price=${product.price}`
 
     } catch (error) {
       console.error(error)
