@@ -3,12 +3,16 @@
 import { useSearchParams } from "next/navigation"
 import { useEffect, useRef } from "react"
 import emailjs from "@emailjs/browser"
+import { siteConfig } from "@/config/site"
 
 export default function SuccessPage() {
   const searchParams = useSearchParams()
 
-  const name = searchParams.get("name")
-  const price = searchParams.get("price")
+  const id = searchParams.get("id")
+  const product = siteConfig.products.find(p => p.id === id)
+
+  const name = product?.name
+  const price = product?.price?.toString()
 
   const hasRun = useRef(false)
 

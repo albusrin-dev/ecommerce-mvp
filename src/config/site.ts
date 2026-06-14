@@ -14,14 +14,17 @@ export const siteConfig = {
 
   products: [
     {
+      id: "p1",
       name: "Workout Program",
       price: 999,
     },
     {
+      id: "p2",
       name: "Nutrition Plan",
       price: 799,
     },
     {
+      id: "p3",
       name: "Coaching Access",
       price: 1499,
     },

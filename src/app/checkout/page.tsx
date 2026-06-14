@@ -7,13 +7,14 @@ import { siteConfig } from "@/config/site"
 export default function CheckoutPage() {
   const searchParams = useSearchParams()
 
-  const name = searchParams.get("name")
-  const price = searchParams.get("price")
+
+  const id = searchParams.get("id")
+  const product = siteConfig.products.find(p => p.id === id)
 
   const [loading, setLoading] = useState(false)
 
   const handlePayment = async () => {
-    if (!name || !price) {
+    if (!product) {
       alert("Invalid product")
       return
     }
@@ -25,9 +26,7 @@ export default function CheckoutPage() {
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
       // redirect to success page
-      window.location.href = `/success?name=${encodeURIComponent(
-        name
-      )}&price=${price}`
+      window.location.href = `/success?id=${id}`
 
     } catch (error) {
       console.error(error)
@@ -46,12 +45,12 @@ export default function CheckoutPage() {
 
         <div>
           <p className="text-gray-400">Product</p>
-          <p className="text-lg">{name}</p>
+          <p className="text-lg">{product?.name}</p>
         </div>
 
         <div>
           <p className="text-gray-400">Price</p>
-          <p className="text-xl font-bold">₱{price}</p>
+          <p className="text-xl font-bold">₱{product?.price}</p>
         </div>
 
         <button

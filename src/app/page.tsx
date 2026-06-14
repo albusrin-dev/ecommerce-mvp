@@ -15,7 +15,8 @@ export default function Home() {
 
           {siteConfig.products.map((product, index) => (
             <ProductCard
-              key={index}
+              key={product.id}
+              id={product.id}
               name={product.name}
               price={product.price}
             />

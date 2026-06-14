@@ -5,16 +5,17 @@ import Button from "./Button"
 import { siteConfig } from "@/config/site"
 
 type Product = {
+  id: string
   name: string
   price: number
 }
 
-export default function ProductCard({ name, price }: Product) {
+export default function ProductCard({ id, name, price }: Product) {
   const router = useRouter()
 
   const handleCheckout = () => {
-    router.push(
-      `/checkout?name=${encodeURIComponent(name)}&price=${price}`
+    router.push(`/checkout?id=${id}`
+
     )
   }
 
